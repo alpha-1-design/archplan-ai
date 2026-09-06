@@ -77,7 +77,7 @@ GITHUB_FILE_MODE = "100644"
 def file_mode(path):
     return GITHUB_FILE_MODE
 
-SKIP_DIRS = {".git", "dist", "android", "node_modules", ".cache", ".vscode", ".idea"}
+SKIP_DIRS = {".git", "dist", "android", "node_modules", ".cache", ".vscode", ".idea", "__pycache__"}
 
 def tree_entries():
     entries = []
@@ -86,13 +86,18 @@ def tree_entries():
         for fn in sorted(files):
             full = os.path.join(root, fn)
             rel = os.path.relpath(full, ".").replace("\\", "/")
+            if rel.startswith("/"):
+                rel = rel.lstrip("/")
             if rel.startswith("."):
-                continue
+                # keep .github, .gitignore, .oxlintrc.json etc.
+                if rel.startswith(".github") or rel.startswith(".gitignore") or rel.startswith(".oxlintrc"):
+                    pass
+                else:
+                    continue
             entries.append((rel, blob(full)))
     entries.sort(key=lambda x: x[0])
     tree = []
     for path, sha in entries:
-        parts = path.split("/")
         tree.append({
             "path": path,
             "mode": file_mode(path),
