@@ -2,6 +2,10 @@
  * Patches the generated AndroidManifest.xml inside a Capacitor Android project
  * so mic-driven voice mode works over plain HTTP and file:// origins.
  *
+ * IMPORTANT: <uses-permission> elements MUST be children of <manifest>,
+ * NOT of <application> — putting them inside <application> produces an
+ * invalid manifest and fails the gradle build during manifest merging.
+ *
  * Usage: node scripts/patch-android-manifest.mjs <path-to-AndroidManifest.xml>
  */
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -13,40 +17,32 @@ if (!file) {
 }
 
 let xml = readFileSync(file, 'utf8');
-let changed = false;
+const before = xml;
 
-// 1. usesCleartextTraffic on <application>
+// 1. usesCleartextTraffic on <application> (valid as an application attribute)
 if (!xml.includes('android:usesCleartextTraffic')) {
   xml = xml.replace(/<application\b/, '<application\n        android:usesCleartextTraffic="true"');
-  changed = true;
 }
 
-// 2. RECORD_AUDIO permission (mic for voice mode)
+// 2. RECORD_AUDIO permission at MANIFEST level (insert just before <application>)
 if (!xml.includes('android.permission.RECORD_AUDIO')) {
   xml = xml.replace(
-    /(<\/application>)/,
-    '    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n$1'
+    /(\s*<application\b)/,
+    '\n    <uses-permission android:name="android.permission.RECORD_AUDIO" />$1'
   );
-  changed = true;
 }
 
-// 3. INTERNET permission
-if (changed && !xml.includes('android.permission.INTERNET')) {
+// 3. INTERNET permission at MANIFEST level, if not already present
+if (!xml.includes('android.permission.INTERNET')) {
   xml = xml.replace(
-    /(<\/application>)/,
-    '    <uses-permission android:name="android.permission.INTERNET" />\n$1'
+    /(\s*<application\b)/,
+    '\n    <uses-permission android:name="android.permission.INTERNET" />$1'
   );
-  changed = true;
 }
 
-if (!changed && !xml.includes('android.permission.RECORD_AUDIO')) {
-  // fallback: manifest already had cleartext but was missing permissions
-  xml = xml.replace(
-    /(<\/application>)/,
-    '    <uses-permission android:name="android.permission.RECORD_AUDIO" />\n    <uses-permission android:name="android.permission.INTERNET" />\n$1'
-  );
-  changed = true;
+if (xml !== before) {
+  writeFileSync(file, xml);
+  console.log(`patched ${file}`);
+} else {
+  console.log(`no changes needed for ${file}`);
 }
-
-writeFileSync(file, xml);
-console.log(`patched ${file}`);

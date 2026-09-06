@@ -165,8 +165,8 @@ def main():
     print("Tree SHA:", tree_sha, flush=True)
     parent = get_main_sha()
     print("Current remote main SHA:", parent, flush=True)
-    ts = "2026-09-06T15:25:00Z"
-    message = "ci: require JDK 21 for Capacitor 7, accept SDK licenses, upload gradle logs on failure"
+    ts = "2026-09-06T15:55:00Z"
+    message = "fix(ci): place uses-permission at manifest level in AndroidManifest patch; capture gradle stdout to logs artifact"
     print("Creating commit...", flush=True)
     commit_sha = commit(tree_sha, parent, message, ts)
     print("Commit SHA:", commit_sha, flush=True)
