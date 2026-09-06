@@ -1,0 +1,9 @@
+{
+  "appId": "com.archplan.ai",
+  "appName": "ARCHPLAN AI",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}

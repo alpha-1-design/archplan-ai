@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blueprint: #0a0f1a;
+  --color-blueprint-light: #111827;
+  --color-blueprint-grid: #1a2436;
+  --color-cyan: #00d4ff;
+  --color-cyan-dim: #00a8cc;
+  --color-cyan-glow: rgba(0, 212, 255, 0.3);
+  --color-cyan-deep: rgba(0, 212, 255, 0.1);
+  --color-amber: #ffb800;
+  --color-red: #ff4757;
+  --color-green: #2ed573;
+  --color-glass: rgba(17, 24, 39, 0.7);
+  --color-glass-border: rgba(0, 212, 255, 0.2);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-blueprint);
+  font-family: var(--font-sans);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-cyan-dim);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-glass-border);
+}
+
+.glass-strong {
+  background: rgba(17, 24, 39, 0.9);
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--color-glass-border);
+}
+
+/* Glow effects */
+.glow-cyan {
+  box-shadow: 0 0 20px var(--color-cyan-glow), 0 0 40px rgba(0, 212, 255, 0.1);
+}
+
+.glow-text {
+  text-shadow: 0 0 10px var(--color-cyan), 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Grid pattern for canvas */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.grid-pattern-large {
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* Animated gradient background */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #0a0f1a, #111827, #0f172a, #0a0f1a);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+/* Pulse animation for voice */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Slow breathing for the speaking orb */
+@keyframes orb-breathe {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.18); opacity: 1; }
+}
+
+.orb-breathe {
+  animation: orb-breathe 1.4s ease-in-out infinite;
+}
+
+/* Stress gradient colors */
+.stress-safe { color: #2ed573; }
+.stress-moderate { color: #ffb800; }
+.stress-critical { color: #ff4757; }
