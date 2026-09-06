@@ -94,11 +94,10 @@ def tree_entries():
     for path, sha in entries:
         parts = path.split("/")
         tree.append({
-            "path": parts[-1],
+            "path": path,
             "mode": file_mode(path),
             "type": "blob",
             "sha": sha,
-            "parent": "/".join(parts[:-1]) or None,
         })
     return tree
 
